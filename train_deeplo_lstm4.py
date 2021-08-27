@@ -34,12 +34,15 @@ parser = argparse.ArgumentParser(
 
 parser.add_argument('--datasets', help='Dataset directory path')
 parser.add_argument('--dataroot',\
-	default = '/Users/ykarmim/Documents/Recherche/Deeplomatics/data/video_data_deeplo',help='Path to video')
+	default = '/share/DEEPLEARNING/datasets/video_data_deeplo',help='Path to video')
 parser.add_argument('--cache_path', help='Cache directory path')
 parser.add_argument('--freeze_net', action='store_true',
 					help="Freeze all the layers except the prediction head.")
 parser.add_argument('--width_mult', default=1.0, type=float,
 					help='Width Multiplifier')
+parser.add_argument('--gpu', default=1, type=int,
+					help='Wich gpu for training')
+
 
 # Params for SGD
 parser.add_argument('--lr', '--learning-rate', default=0.003, type=float,
@@ -98,8 +101,8 @@ parser.add_argument('--checkpoint_folder', default='models/',
 logging.basicConfig(stream=sys.stdout, level=logging.INFO,
 					format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 args = parser.parse_args()
-DEVICE = torch.device("cuda:0" if torch.cuda.is_available() and args.use_cuda else "cpu")
-
+DEVICE = torch.device("cuda:"+str(args.gpu) if torch.cuda.is_available() else "cpu")
+print('DEVICE',DEVICE)
 if args.use_cuda and torch.cuda.is_available():
 	torch.backends.cudnn.benchmark = True
 	logging.info("Use Cuda.")
@@ -129,7 +132,7 @@ def train(loader, net, criterion, optimizer, device, debug_steps=100, epoch=-1, 
 			label = label.to(device)
 
 			optimizer.zero_grad()
-			confidence, locations = net(image)
+			confidence, locations = net(image.unsqueeze(0))
 			regression_loss, classification_loss = criterion(confidence, locations, label, box)  # TODO CHANGE BOXES
 			if box == [0.,0.,0.,0.]:
 				loss = classification_loss # Only clasif loss if we dont have bbox 

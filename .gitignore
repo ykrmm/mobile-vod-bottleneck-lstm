@@ -1,4 +1,11 @@
 cache/
 eval_results/
+*/__pycache__/
 __pycache__/
-*.py[cod]
+*__pycache__
+utils/__pycache__/
+network/__pycache__/
+config/__pycache__/
+datasets/__pycache__/
+*.pyc
+*/*.pyc
