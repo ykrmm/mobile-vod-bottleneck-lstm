@@ -9,3 +9,4 @@ config/__pycache__/
 datasets/__pycache__/
 *.pyc
 */*.pyc
+*.out

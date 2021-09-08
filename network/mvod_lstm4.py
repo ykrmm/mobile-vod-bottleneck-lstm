@@ -154,6 +154,7 @@ class BottleneckLSTMCell(nn.Module):
 			output tensor after LSTM cell 
 		"""
 		x = self.W(x)
+		
 		y = torch.cat((x, h),1) #concatenate input and hidden layers
 		i = self.Wy(y) #reduce to hidden layer size
 		b = self.Wi(i)	#depth wise 3*3
@@ -236,6 +237,7 @@ class MobileNetV1(nn.Module):
 			num_classes : an int variable having value of total number of classes
 			alpha : a float used as width multiplier for channels of model
 		"""
+		print('init mobilenetv1')
 		super(MobileNetV1, self).__init__()
 		# upto conv 12
 		self.model = nn.Sequential(
@@ -452,7 +454,7 @@ class MobileVOD(nn.Module):
 		self.pred_encoder = pred_enc
 		self.pred_decoder = pred_dec
 		
-
+		print('init MobileVOD')
 	def forward(self, seq):
 		"""
 		Arguments:
@@ -460,7 +462,9 @@ class MobileVOD(nn.Module):
 		Returns:
 			confidences and locations of predictions made by model
 		"""
+		print('Here in MoBileVOD')
 		x = self.pred_encoder(seq)
+		print('X size',x.size())
 		confidences, locations = self.pred_decoder(x)
 		return confidences , locations
 

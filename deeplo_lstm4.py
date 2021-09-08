@@ -40,7 +40,7 @@ parser.add_argument('--freeze_net', action='store_true',
 					help="Freeze all the layers except the prediction head.")
 parser.add_argument('--width_mult', default=1.0, type=float,
 					help='Width Multiplifier')
-parser.add_argument('--gpu', default=1, type=int,
+parser.add_argument('--gpu', default=0, type=int,
 					help='Wich gpu for training')
 
 
@@ -130,11 +130,11 @@ def train(loader, net, criterion, optimizer, device, debug_steps=100, epoch=-1, 
 			image = image.to(device)
 			box = box.to(device)
 			label = label.to(device)
-
+			print('okay')
 			optimizer.zero_grad()
 			confidence, locations = net(image.unsqueeze(0))
 			regression_loss, classification_loss = criterion(confidence, locations, label, box)  # TODO CHANGE BOXES
-			if box == [0.,0.,0.,0.]:
+			if box == [1.,1.,2.,2.]:
 				loss = classification_loss # Only clasif loss if we dont have bbox 
 			else:
 				loss = regression_loss + classification_loss

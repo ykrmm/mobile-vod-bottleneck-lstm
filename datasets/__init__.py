@@ -1,1 +1,1 @@
-from .vid_deeplo_dataset import DeeplomaticsVID
+from .vid_deeplo_dataset import DeeplomaticsVID,DeeplomaticsImage
